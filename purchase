@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>購入確認ページ</title>
+  <link rel="stylesheet" href="code/cart.css" />
+</head>
+<body>
+  <h1>🧾 購入内容の確認</h1>
+
+  <button onclick="history.back()" style="
+    margin: 20px;
+    padding: 10px 16px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+  ">← カートに戻る</button>
+
+  <div id="cart-items" class="cart-box"></div>
+  <p id="cart-total" class="total-text"></p>
+
+  <button class="purchase-btn" onclick="completePurchase()">✅ この内容で購入する</button>
+
+  <script>
+##初回アクセス記録
+    if (!localStorage.getItem("entryTime")) {
+      localStorage.setItem("entryTime", new Date().toISOString());
+    }
+
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const cartItemsDiv = document.getElementById("cart-items");
+    const cartTotalP = document.getElementById("cart-total");
+
+    let total = 0;
+
+##カート内容を表示
+    cart.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "cart-item";
+      div.innerHTML = `
+        <div class="item-info">
+          <strong>${item.name}</strong> × ${item.quantity}
+          <span>（¥${item.price * item.quantity}）</span>
+        </div>
+      `;
+      cartItemsDiv.appendChild(div);
+      total += item.price * item.quantity;
+    });
+
+    cartTotalP.textContent = `合計金額: ¥${total.toLocaleString()}`;
+
+    let isSending = false;
+
+    function completePurchase() {
+      if (isSending) return;
+      isSending = true;
+
+      const btn = document.querySelector('.purchase-btn');
+      btn.disabled = true;
+
+      const userName = localStorage.getItem("userName");
+
+      if (!userName || userName.trim() === "") {
+        alert("名前が入力されていません。トップページに戻ります。");
+        location.href = "index.html";
+        return;
+      }
+
+      const entryTime = new Date(localStorage.getItem("entryTime"));
+      const leaveTime = new Date();
+      const stayMinutes = Math.round((leaveTime - entryTime) / 1000 / 60);
+
+      const itemsSummary = cart.map(item => `${item.name}x${item.quantity}`).join(", ");
+      const pathHistory = JSON.parse(localStorage.getItem("pageHistory") || "[]");
+      const pathText = pathHistory.join(" → ");
+
+      const gasUrl = "https://script.google.com/macros/s/AKfycby3dxf9PRZJ7DxSUxAYuJMaBU1q5lzjnT--mYYVhrffmYeh3t4ZzDm-Iow1SXTcw09i/exec";
+
+      const params = new URLSearchParams({
+        action: "purchase",
+        stay: stayMinutes,
+        total: total,
+        items: itemsSummary,
+        name: userName,
+        history: pathText
+      });
+
+      fetch(`${gasUrl}?${params.toString()}`)
+        .then(response => {
+          alert("購入が記録されました！ありがとうございました。");
+          localStorage.clear();
+          location.href = "thanks.html";
+        })
+        .catch(error => {
+          alert("送信に失敗しました");
+          console.error(error);
+          btn.disabled = false;
+          isSending = false;
+        });
+    }
+  </script>
+
+  <script src="track.js"></script>
+</body>
+</html>
