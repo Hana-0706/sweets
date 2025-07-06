@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>名前入力</title>
+    <link rel="stylesheet" href="/newcode/login.css" />
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding: 3em;
+        }
+        input {
+            font-size: 1.2em;
+            padding: 0.5em;
+        }
+        button {
+            padding: 0.5em 1.2em;
+            font-size: 1em;
+            margin-top: 1em;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<div class="login-notice">
+    ※購入内容はカートページ後の最終確認画面で「✅ この内容で購入する」ボタンを押すまで記録されません。 
+</div>
+
+<body>
+    <h1>お名前を入力してください(ニックネームや偽名でOK！)
+    </h1>
+    <input type="text" id="username" placeholder="例：はな">
+    <br>
+    <button onclick="saveName()">OK</button>
+
+    <script>
+        function saveName() {
+            const name = document.getElementById("username").value.trim();
+            
+            if (!name) {
+                alert("名前を入力してください。");
+                return;
+            }
+            
+            localStorage.setItem("userName", name);
+            location.href = "home.html"; // 入力後にトップページなどへ遷移
+        }
+
+    </script>
+
+<script src="track.js"></script>
+
+</body>
+</html>
