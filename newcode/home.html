@@ -52,9 +52,9 @@
 
 <script>
   const items = {
-    1: { id: 1, name: "クッキー", price: 400 },
-    2: { id: 2, name: "チョコ", price: 400 },
-    3: { id: 3, name: "キャンディー", price: 400 }
+    1: { id: 1, name: "クッキー", price: 100 },
+    2: { id: 2, name: "チョコ", price: 100 },
+    3: { id: 3, name: "キャンディー", price: 100 }
   };
 
   function addToCart(item) {
@@ -95,5 +95,31 @@
 </script>
 
 <script src="track.js"></script>
+
+<script>
+  window.onload = function() {
+    const currentPage = window.location.pathname.split("/").pop() || "home";
+    let pageHistory = JSON.parse(localStorage.getItem("pageHistory") || "[]");
+    pageHistory.push(currentPage);
+    if (pageHistory.length > 100) {
+      pageHistory.shift();
+    }
+    localStorage.setItem("pageHistory", JSON.stringify(pageHistory));
+
+    const apiURL = "https://script.google.com/macros/s/AKfycbxce3VnUPC9bMazNu-OfnKGbMZnprXs7MvSmIhDiNQOZle5qeFxyQtHY_y0hFD0yEzRyw/exec";
+    const params = new URLSearchParams({
+      action: "visit",
+      history: pageHistory.join(" → "),
+      page: currentPage
+    });
+
+    fetch(`${apiURL}?${params.toString()}`)
+      .then(response => response.text())
+      .then(data => console.log("訪問記録成功:", data))
+      .catch(err => console.error("訪問記録エラー:", err));
+  };
+</script>
+
+  
 </body>
 </html>
