@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>カートページ</title>
+  <link rel="stylesheet" href="/newcode/cart.css" />
+</head>
+<body>
+  <h1>🛒 あなたのカート</h1>
+
+  <button onclick="history.back()" style="
+    margin: 20px;
+    padding: 10px 16px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+  ">← 前のページに戻る</button>
+
+  <div id="cart-items"></div>
+  <p class="total" id="cart-total">合計: ¥0</p>
+
+  <button onclick="goToPurchase()" style="
+    display: block;
+    margin: 20px auto;
+    padding: 12px 24px;
+    background-color: #ff8a65;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+  ">購入へすすむ →</button>
+
+  <script>
+    function goToPurchase() {
+      window.location.href = "purchase.html";
+    }
+
+    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const container = document.getElementById("cart-items");
+    const totalEl = document.getElementById("cart-total");
+
+    function updateQuantity(index, change) {
+      cart[index].quantity += change;
+      if (cart[index].quantity < 1) {
+        cart[index].quantity = 1;
+      }
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function renderCart() {
+      container.innerHTML = "";
+      let total = 0;
+
+      if (cart.length === 0) {
+        container.innerHTML = "<p style='text-align:center;'>カートは空です。</p>";
+        totalEl.textContent = "合計: ¥0";
+        return;
+      }
+
+      cart.forEach((item, index) => {
+        total += item.price * item.quantity;
+
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+          <div class="item-info">
+            <p><strong>${item.name}</strong></p>
+            <p>
+              ¥${item.price} × 
+              <button onclick="updateQuantity(${index}, -1)">－</button>
+              ${item.quantity}
+              <button onclick="updateQuantity(${index}, 1)">＋</button>
+            </p>
+          </div>
+          <button class="delete-btn" onclick="removeItem(${index})">削除</button>
+        `;
+        container.appendChild(div);
+      });
+
+      totalEl.textContent = "合計: ¥" + total.toLocaleString();
+    }
+
+    renderCart();
+  </script>
+
+  <script src="track.js"></script>
+</body>
+</html>
