@@ -1,0 +1,51 @@
+body {
+  font-family: "Helvetica", "Hiragino Kaku Gothic ProN", sans-serif;
+  padding: 2em;
+  background-color: #fff8f0;
+  color: #333;
+  margin: 0;
+}
+
+h1 {
+  font-size: 1.8em;
+  margin-bottom: 1.5em;
+  text-align: center;
+  color: #6d4c41;
+}
+
+.cart-box div {
+  background: #fff;
+  padding: 1em;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-bottom: 0.75em;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.total-text {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-top: 2em;
+  text-align: center;
+  color: #6d4c41;
+}
+
+.purchase-btn, .buy-button {
+  background-color: #ff8a65;
+  color: white;
+  border: none;
+  padding: 1em 2em;
+  font-size: 1em;
+  border-radius: 8px;
+  cursor: pointer;
+  display: block;
+  margin: 2em auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.purchase-btn:hover, .buy-button:hover {
+  background-color: #e64a19;
+}
