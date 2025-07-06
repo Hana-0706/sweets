@@ -52,104 +52,6 @@
 
 <script src="track.js"></script>
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <title>お菓子ショップ</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>      
-
-<header>
-  <h1>お菓子ショップ</h1>
-  <a href="cart.html" class="cart-link">
-    🛒 カート <span id="cart-count">0</span>
-  </a> 
-  <script>
-    function updateCartCount() {
-      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-      document.getElementById("cart-count").textContent = totalCount;
-    }
-    window.addEventListener("DOMContentLoaded", updateCartCount);
-  </script>
-</header>
-
-<section class="main-product">
-  <h2>人気のお菓子</h2>
-
-  <div class="product-container">
-    <div class="product-card">
-      <img src="../image/sweets_cookie.png" alt="クッキー" />
-      <p>クッキー - ¥100</p>
-      <button onclick="addToCartItem(1)">カートに追加</button>
-    </div>
-
-    <div class="product-card">
-      <img src="../image/valentinesday_itachoco2.png" alt="チョコ" />
-      <p>チョコ - ¥100</p>
-      <button onclick="addToCartItem(2)">カートに追加</button>
-    </div>
-
-    <div class="product-card">
-      <img src="../image/candy.png" alt="キャンディー" />
-      <p>キャンディー - ¥100</p>
-      <button onclick="addToCartItem(3)">カートに追加</button>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <p>&copy; 2025 お菓子ショップ</p>
-</footer>
-
-<script>
-  const items = {
-    1: { id: 1, name: "クッキー", price: 400 },
-    2: { id: 2, name: "チョコ", price: 400 },
-    3: { id: 3, name: "キャンディー", price: 400 }
-  };
-
-  function addToCart(item) {
-    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const existingItem = cart.find(product => product.id === item.id);
-
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      cart.push({ ...item, quantity: 1 });
-    }
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-    alert(`${item.name} をカートに追加しました！`);
-    updateCartCount();
-  }
-
-  function addToCartItem(id) {
-    addToCart(items[id]);
-  }
-
-  function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const cartCountElem = document.getElementById("cart-count");
-    if (cartCountElem) {
-      cartCountElem.textContent = totalCount;
-    }
-  }
-
-  window.addEventListener("storage", (event) => {
-    if (event.key === "cart") {
-      updateCartCount();
-    }
-  });
-
-  window.addEventListener("DOMContentLoaded", updateCartCount);
-</script>
-
-<script src="track.js"></script>
-
 <script>
   window.onload = function() {
     const currentPage = window.location.pathname.split("/").pop() || "home";
@@ -173,10 +75,6 @@
       .catch(err => console.error("訪問記録エラー:", err));
   };
 </script>
-
-  
-</body>
-</html>
 
 
 </body>
