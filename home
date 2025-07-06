@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>お菓子ショッピングサイト</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>お菓子ショッピングサイト</h1>
+  </header>
+
+  <main class="product-list">
+    <div class="product">
+      <img src="sweets_cookie.png" alt="クッキー" />
+      <h2>クッキー</h2>
+      <p>¥400</p>
+      <button>カートに入れる</button>
+    </div>
+
+    <div class="product">
+      <img src="valentinesday_itachoco2.png" alt="チョコレート" />
+      <h2>チョコレート</h2>
+      <p>¥400</p>
+      <button>カートに入れる</button>
+    </div>
+
+    <div class="product">
+      <img src="candy.png" alt="キャンディー" />
+      <h2>フルーツキャンディー</h2>
+      <p>¥400</p>
+      <button>カートに入れる</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 お菓子ショッピングサイト</p>
+  </footer>
+</body>
+</html>
+
