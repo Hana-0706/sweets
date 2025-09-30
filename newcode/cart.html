@@ -174,7 +174,7 @@
       const totalPrice = cart.reduce((sum, item)=>sum+item.price*item.quantity,0);
       const stayMinutes = Math.round((Date.now() - window.startTime)/60000);
 
-      const useName = localStorage.getIte("userName") || "未入力";
+      const userName = localStorage.getItem("userName") || "未入力";
       
       const purchaseParams = new URLSearchParams({
         action: "purchase",
