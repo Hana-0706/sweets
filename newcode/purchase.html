@@ -115,29 +115,6 @@
 
   <script src="track.js"></script>
 
-<script>
-  window.onload = function() {
-    const currentPage = window.location.pathname.split("/").pop() || "home";
-    let pageHistory = JSON.parse(localStorage.getItem("pageHistory") || "[]");
-    pageHistory.push(currentPage);
-    if (pageHistory.length > 100) {
-      pageHistory.shift();
-    }
-    localStorage.setItem("pageHistory", JSON.stringify(pageHistory));
-
-    const apiURL = "https://script.google.com/macros/s/AKfycbzFMy8XoOnNS-jgl_OWVsk-VlL1F9safbBj4BQAlCZZ0VNPMhzRD12-4DYByQj7SmXu1Q/exec";
-    const params = new URLSearchParams({
-      action: "visit",
-      history: pageHistory.join(" → "),
-      page: currentPage
-    });
-
-    fetch(`${apiURL}?${params.toString()}`)
-      .then(response => response.text())
-      .then(data => console.log("訪問記録成功:", data))
-      .catch(err => console.error("訪問記録エラー:", err));
-  };
-</script>
 
 
 </body>
