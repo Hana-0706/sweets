@@ -50,6 +50,17 @@
 
     </script>
 
+<script>
+// グループ分け
+let group = sessionStorage.getItem("group");
+if (!group) {
+  group = (Math.random() < 0.5) ? "A" : "B";
+  sessionStorage.setItem("group", group);
+}
+console.log("Experiment group (index page):", group);
+</script>
+
+
 <script src="track.js"></script>
 
 <script>
