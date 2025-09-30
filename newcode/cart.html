@@ -43,8 +43,12 @@
   ">購入へすすむ →</button>
 
    <script>
-     let group = sessionStorage.getItem("abGroup")||"A";
-     console.log("Experiment group (on purchase page):", group);
+     let group = sessionStorage.getItem("group");
+     if(!group){
+       group = (Math.random() < 0.5) ? "A" : "B";
+      sessionStorage.setItem("group", group);
+     }
+     console.log("Experiment group:", group);
      
     const apiURL = "https://script.google.com/macros/s/AKfycbzFMy8XoOnNS-jgl_OWVsk-VlL1F9safbBj4BQAlCZZ0VNPMhzRD12-4DYByQj7SmXu1Q/exec";
 
@@ -103,23 +107,14 @@
     renderCart();
      
  
-//ページ履歴とA/Bテスト
+//ページ履歴と訪問記録
    
     window.startTime = Date.now();
     const currentPage = window.location.pathname.split("/").pop() || "home";
     let pageHistory = JSON.parse(localStorage.getItem("pageHistory") || "[]");
     pageHistory.push(currentPage);
     if(pageHistory.length > 100) pageHistory.shift();
-    localStorage.setItem("pageHistory", JSON.stringify(pageHistory));
-
-    // 毎回ランダムに A/B グループを決定
-    let abGroup = sessionStorage.getItem("abGroup");
-  　if (!abGroup) {
-    　abGroup = (Math.random() < 0.5) ? "A" : "B";
-  　　sessionStorage.setItem("abGroup", abGroup);
-　　}
-　　window.abGroup = abGroup;
-　　console.log("Experiment group:", abGroup);
+    localStorage.setItem("pageHistory", JSON.stringify(pageHistory))
 
 
     // 訪問ログ送信
@@ -127,16 +122,15 @@
       action: "visit",
       history: pageHistory.join(" → "),
       page: currentPage,
-      group: abGroup
+      group: group
     });
     fetch(`${apiURL}?${visitParams.toString()}`)
       .then(res=>res.text())
       .then(data=>console.log("visit recorded:", data))
       .catch(err=>console.error("visit record error:", err));
 
-    // -------------------
-    // おすすめ商品
-    // -------------------
+   // おすすめ商品
+    
     const recommendCandidates = [
   {name:"グミ", price:100, img:"https://hana-0706.github.io/sweets/image/gumi.png"},
   {name:"キャラメル", price:100, img:"https://hana-0706.github.io/sweets/image/caramel.png"},
@@ -169,21 +163,18 @@
       document.getElementById("recommend-block").style.display="block";
     }
 
-    // Bグループのみ表示
+  // Bグループのみ表示
     if(abGroup === "B"){
       renderRecommendations();
     }
 
-    // -------------------
-    // 購入ボタン
-    // -------------------
+  
+  // 購入ボタン
+  
     function goToPurchase() {
-      const cartJSON = JSON.stringify(cart);
       const totalPrice = cart.reduce((sum, item)=>sum+item.price*item.quantity,0);
       const stayMinutes = Math.round((Date.now() - window.startTime)/60000);
-
       const userName = localStorage.getItem("userName") || "未入力";
-
       const itemsSummary = cart.map(item => `${item.name}x${item.quantity}`).join(", ");
       
       const purchaseParams = new URLSearchParams({
@@ -193,7 +184,7 @@
         total: totalPrice,
         items: itemsSummary,
         history: pageHistory.join(" → "),
-        group: abGroup
+        group: group
       });
 
       fetch(`${apiURL}?${purchaseParams.toString()}`)
