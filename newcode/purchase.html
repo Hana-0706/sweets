@@ -25,10 +25,12 @@
 
   <script>
 //グループ分け
-   let group = sessionStorage.getItem("group") || "A";
-   sessionStorage.setItem("group", group);
-   console.log("Experiment group (purchase page):", group);
-    
+　　let group = sessionStorage.getItem("group");
+　　if (!group) {
+    group = (Math.random() < 0.5) ? "A" : "B";
+    sessionStorage.setItem("group", group);
+}
+　　console.log("Experiment group (purchase page):", group);
 //初回アクセス記録
     if (!localStorage.getItem("entryTime")) {
       localStorage.setItem("entryTime", new Date().toISOString());
