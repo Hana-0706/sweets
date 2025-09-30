@@ -94,7 +94,7 @@
 
       fetch(`${gasUrl}?${params.toString()}`)
         .then(response => response.text())
-        .then(response => {
+        .then(data => {
           console.log("サーバー応答:", data);
           alert("購入が記録されました！ありがとうございました。");
           localStorage.clear();
@@ -102,7 +102,7 @@
         })
         .catch(error => {
           alert("送信に失敗しました");
-          console.error(error);
+          console.error("エラー:", error);
           btn.disabled = false;
           btn.textContent = "✅ この内容で購入する";
           isSending = false;
