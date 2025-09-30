@@ -59,11 +59,15 @@
 
       const btn = document.querySelector('.purchase-btn');
       btn.disabled = true;
+      btn.textContent = "処理中…";
 
       const userName = localStorage.getItem("userName");
 
       if (!userName || userName.trim() === "") {
         alert("名前が入力されていません。トップページに戻ります。");
+        btn.disabled = false;
+        btn.textContent = "✅ この内容で購入する";
+        isSending = false;
         location.href = "index.html";
         return;
       }
@@ -97,6 +101,7 @@
           alert("送信に失敗しました");
           console.error(error);
           btn.disabled = false;
+          btn.textContent = "✅ この内容で購入する";
           isSending = false;
         });
     }
