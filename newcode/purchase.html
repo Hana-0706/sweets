@@ -23,14 +23,11 @@
 
   <button class="purchase-btn" onclick="completePurchase()">✅ この内容で購入する</button>
 
-  <script>
-//グループ分け
-　　let group = sessionStorage.getItem("group");
-　　if (!group) {
-    group = (Math.random() < 0.5) ? "A" : "B";
-    sessionStorage.setItem("group", group);
-}
-　　console.log("Experiment group (purchase page):", group);
+ <script>
+　let group = sessionStorage.getItem("group") || "A"; 
+　console.log("Experiment group (this page):", group);
+　</script>
+  
 //初回アクセス記録
     if (!localStorage.getItem("entryTime")) {
       localStorage.setItem("entryTime", new Date().toISOString());
