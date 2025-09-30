@@ -20,6 +20,14 @@
   <div id="cart-items"></div>
   <p class="total" id="cart-total">合計: ¥0</p>
 
+
+<!-- ★おすすめ商品 -->
+<div id="recommend-block" style="display:none; margin:20px auto; padding:16px; border-top:2px solid #eee; max-width:600px;">
+  <h2 style="font-size:18px; margin-bottom:12px;"> おすすめ商品</h2>
+  <div id="recommend-items" style="display:flex; gap:16px; flex-wrap:wrap;"></div>
+</div>
+
+
   <button onclick="goToPurchase()" style="
     display: block;
     margin: 20px auto;
@@ -117,6 +125,68 @@
       .catch(err => console.error("訪問記録エラー:", err));
   };
 </script>
+
+  <script>
+    // おすすめ商品の候補リスト
+    const recommendCandidates = [
+      {name:"グミ", price:300, img:"gumi.png"},
+      {name:"キャラメル", price:400, img:"caramel.png"},
+    ];
+
+    function renderRecommendations() {
+      const recDiv = document.getElementById("recommend-items");
+      if (!recDiv) return;
+
+      recDiv.innerHTML = "";
+      const shuffled = [...recommendCandidates].sort(() => 0.5 - Math.random());
+      const picks = shuffled.slice(0, 2);
+
+      picks.forEach(item => {
+        const card = document.createElement("div");
+        card.style.cssText = "flex:1 1 45%; border:1px solid #ddd; border-radius:8px; padding:8px; text-align:center;";
+
+        card.innerHTML = `
+          <img src="${item.img}" alt="${item.name}" style="width:100px; height:100px; object-fit:cover; margin-bottom:8px;">
+          <p><strong>${item.name}</strong></p>
+          <p>¥${item.price}</p>
+          <button style="margin-top:6px; padding:6px 12px; background:#ffb74d; border:none; border-radius:6px; cursor:pointer;">
+            カートに追加
+          </button>
+        `;
+
+        card.querySelector("button").addEventListener("click", () => {
+          cart.push({name:item.name, price:item.price, quantity:1});
+          localStorage.setItem("cart", JSON.stringify(cart));
+          renderCart();
+          alert(item.name + " をカートに追加しました！");
+        });
+
+        recDiv.appendChild(card);
+      });
+
+      document.getElementById("recommend-block").style.display = "block";
+    }
+
+    function abTestRecommendation() {
+      let group = localStorage.getItem("reco_ab_group");
+      if (!group) {
+        group = (Math.random() < 0.5) ? "A" : "B"; // A=非表示, B=表示
+        localStorage.setItem("reco_ab_group", group);
+      }
+
+      console.log("Experiment group:", group);
+
+      if (group === "B") {
+        renderRecommendations();
+      }
+    }
+
+    abTestRecommendation();
+  </script>
+  
+</body>
+</html>
+
 
 </body>
 </html>
