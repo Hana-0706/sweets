@@ -24,6 +24,11 @@
   <button class="purchase-btn" onclick="completePurchase()">✅ この内容で購入する</button>
 
   <script>
+//グループ分け
+   let group = sessionStorage.getItem("group") || "A";
+   sessionStorage.setItem("group", group);
+   console.log("Experiment group (purchase page):", group);
+    
 //初回アクセス記録
     if (!localStorage.getItem("entryTime")) {
       localStorage.setItem("entryTime", new Date().toISOString());
@@ -35,7 +40,7 @@
 
     let total = 0;
 
-//カート内容を表示
+//カート内表示
     cart.forEach(item => {
       const div = document.createElement("div");
       div.className = "cart-item";
