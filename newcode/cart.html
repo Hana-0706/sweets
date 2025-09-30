@@ -40,10 +40,9 @@
     cursor: pointer;
   ">購入へすすむ →</button>
 
-  <script>
-    function goToPurchase() {
-      window.location.href = "purchase.html";
-    }
+   <script>
+    const apiURL = "https://script.google.com/macros/s/AKfycbxce3VnUPC9bMazNu-OfnKGbMZnprXs7MvSmIhDiNQOZle5qeFxyQtHY_y0hFD0yEzRyw/exec";
+
 
     let cart = JSON.parse(localStorage.getItem("cart") || "[]");
     const container = document.getElementById("cart-items");
@@ -76,7 +75,6 @@
 
       cart.forEach((item, index) => {
         total += item.price * item.quantity;
-
         const div = document.createElement("div");
         div.className = "cart-item";
         div.innerHTML = `
@@ -98,94 +96,98 @@
     }
 
     renderCart();
-  </script>
-
-  <script src="track.js"></script>
-
-<script>
-  window.onload = function() {
+     
+ 
+//ページ履歴とA/Bテスト
+   
+    window.startTime = Date.now();
     const currentPage = window.location.pathname.split("/").pop() || "home";
     let pageHistory = JSON.parse(localStorage.getItem("pageHistory") || "[]");
     pageHistory.push(currentPage);
-    if (pageHistory.length > 100) {
-      pageHistory.shift();
-    }
+    if(pageHistory.length > 100) pageHistory.shift();
     localStorage.setItem("pageHistory", JSON.stringify(pageHistory));
 
-    const apiURL = "https://script.google.com/macros/s/AKfycbxce3VnUPC9bMazNu-OfnKGbMZnprXs7MvSmIhDiNQOZle5qeFxyQtHY_y0hFD0yEzRyw/exec";
-    const params = new URLSearchParams({
+    // 毎回ランダムに A/B グループを決定
+    const abGroup = (Math.random() < 0.5) ? "A" : "B";
+    window.abGroup = abGroup; // 他の関数でも使える
+    console.log("Experiment group:", abGroup);
+
+    // 訪問ログ送信
+    const visitParams = new URLSearchParams({
       action: "visit",
       history: pageHistory.join(" → "),
-      page: currentPage
+      page: currentPage,
+      group: abGroup
     });
+    fetch(`${apiURL}?${visitParams.toString()}`)
+      .then(res=>res.text())
+      .then(data=>console.log("visit recorded:", data))
+      .catch(err=>console.error("visit record error:", err));
 
-    fetch(`${apiURL}?${params.toString()}`)
-      .then(response => response.text())
-      .then(data => console.log("訪問記録成功:", data))
-      .catch(err => console.error("訪問記録エラー:", err));
-  };
-</script>
-
-  <script>
-    // おすすめ商品の候補リスト
+    // -------------------
+    // おすすめ商品
+    // -------------------
     const recommendCandidates = [
       {name:"グミ", price:300, img:"gumi.png"},
       {name:"キャラメル", price:400, img:"caramel.png"},
     ];
 
-    function renderRecommendations() {
+    function renderRecommendations(){
       const recDiv = document.getElementById("recommend-items");
-      if (!recDiv) return;
-
+      if(!recDiv) return;
       recDiv.innerHTML = "";
-      const shuffled = [...recommendCandidates].sort(() => 0.5 - Math.random());
-      const picks = shuffled.slice(0, 2);
-
-      picks.forEach(item => {
+      const shuffled = [...recommendCandidates].sort(()=>0.5-Math.random());
+      const picks = shuffled.slice(0,2);
+      picks.forEach(item=>{
         const card = document.createElement("div");
         card.style.cssText = "flex:1 1 45%; border:1px solid #ddd; border-radius:8px; padding:8px; text-align:center;";
-
         card.innerHTML = `
           <img src="${item.img}" alt="${item.name}" style="width:100px; height:100px; object-fit:cover; margin-bottom:8px;">
           <p><strong>${item.name}</strong></p>
           <p>¥${item.price}</p>
-          <button style="margin-top:6px; padding:6px 12px; background:#ffb74d; border:none; border-radius:6px; cursor:pointer;">
-            カートに追加
-          </button>
+          <button style="margin-top:6px; padding:6px 12px; background:#ffb74d; border:none; border-radius:6px; cursor:pointer;">カートに追加</button>
         `;
-
-        card.querySelector("button").addEventListener("click", () => {
+        card.querySelector("button").addEventListener("click", ()=>{
           cart.push({name:item.name, price:item.price, quantity:1});
           localStorage.setItem("cart", JSON.stringify(cart));
           renderCart();
-          alert(item.name + " をカートに追加しました！");
+          alert(item.name+" をカートに追加しました！");
         });
-
         recDiv.appendChild(card);
       });
-
-      document.getElementById("recommend-block").style.display = "block";
+      document.getElementById("recommend-block").style.display="block";
     }
 
-    function abTestRecommendation() {
-  const group = (Math.random() < 0.5) ? "A" : "B"; // A=非表示, B=表示
-  console.log("Experiment group:", group);
+    // Bグループのみ表示
+    if(abGroup === "B"){
+      renderRecommendations();
+    }
 
-  if (group === "B") {
-    renderRecommendations();
-  }
-}
+    // -------------------
+    // 購入ボタン
+    // -------------------
+    function goToPurchase() {
+      const cartJSON = JSON.stringify(cart);
+      const totalPrice = cart.reduce((sum, item)=>sum+item.price*item.quantity,0);
+      const stayMinutes = Math.round((Date.now() - window.startTime)/60000);
 
-abTestRecommendation();
+      const purchaseParams = new URLSearchParams({
+        action: "purchase",
+        name: userName,
+        stay: stayMinutes,
+        total: totalPrice,
+        items: cartJSON,
+        history: pageHistory.join(" → "),
+        group: abGroup
+      });
 
-const group = (Math.random() < 0.5) ? "A" : "B";
-fetch(`${apiURL}?${params.toString()}&group=${group}`);
-  
+      fetch(`${apiURL}?${purchaseParams.toString()}`)
+        .then(res=>res.text())
+        .then(data=>console.log("purchase recorded:", data))
+        .catch(err=>console.error("purchase record error:", err));
+
+      window.location.href = "purchase.html";
+    }
   </script>
-  
-</body>
-</html>
-
-
 </body>
 </html>
