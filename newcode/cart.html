@@ -168,20 +168,19 @@
     }
 
     function abTestRecommendation() {
-      let group = localStorage.getItem("reco_ab_group");
-      if (!group) {
-        group = (Math.random() < 0.5) ? "A" : "B"; // A=非表示, B=表示
-        localStorage.setItem("reco_ab_group", group);
-      }
+  const group = (Math.random() < 0.5) ? "A" : "B"; // A=非表示, B=表示
+  console.log("Experiment group:", group);
 
-      console.log("Experiment group:", group);
+  if (group === "B") {
+    renderRecommendations();
+  }
+}
 
-      if (group === "B") {
-        renderRecommendations();
-      }
-    }
+abTestRecommendation();
 
-    abTestRecommendation();
+const group = (Math.random() < 0.5) ? "A" : "B";
+fetch(`${apiURL}?${params.toString()}&group=${group}`);
+  
   </script>
   
 </body>
