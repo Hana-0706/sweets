@@ -167,7 +167,6 @@
 
   
   // 購入ボタン
-  <script>
     function goToPurchase() {
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
       const totalPrice = cart.reduce((sum, item)=>sum+item.price*item.quantity,0);
@@ -189,7 +188,7 @@
         group: group
       });
 
-      fetch(`${apiURL}?${purchaseParams.toString()}`)
+      fetch(`${apiURL}?${params.toString()}`)
         .then(res=>res.text())
         .then(data=>console.log("purchase recorded:", data))
         .catch(err=>console.error("purchase record error:", err));
