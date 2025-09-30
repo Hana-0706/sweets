@@ -180,13 +180,15 @@
       const stayMinutes = Math.round((Date.now() - window.startTime)/60000);
 
       const userName = localStorage.getItem("userName") || "未入力";
+
+      const itemsSummary = cart.map(item => `${item.name}x${item.quantity}`).join(", ");
       
       const purchaseParams = new URLSearchParams({
         action: "purchase",
         name: userName,
         stay: stayMinutes,
         total: totalPrice,
-        items: cartJSON,
+        items: itemsSummary,
         history: pageHistory.join(" → "),
         group: abGroup
       });
