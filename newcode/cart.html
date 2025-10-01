@@ -128,13 +128,13 @@
 
    // おすすめ商品
     
-    const recommendCandidates = [
+const recommendCandidates = [
   {name:"グミ", price:100, img:"https://hana-0706.github.io/sweets/image/gumi.png"},
   {name:"キャラメル", price:100, img:"https://hana-0706.github.io/sweets/image/caramel.png"},
 ];
 
 
-    function renderRecommendations(){
+function renderRecommendations(){
       const recDiv = document.getElementById("recommend-items");
       if(!recDiv) return;
       recDiv.innerHTML = "";
@@ -166,33 +166,8 @@
     }
 
   
-  // 購入ボタン
+  //ページ遷移
     function goToPurchase() {
-      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      const totalPrice = cart.reduce((sum, item)=>sum+item.price*item.quantity,0);
-      const stayMinutes = Math.round((Date.now() - window.startTime)/60000);
-      
-      const userName = localStorage.getItem("userName") || "未入力";  
-      const itemsSummary = cart.map(item => `${item.name}x${item.quantity}`).join(", ");
-
-      const pageHistory = JSON.parse(localStorage.getItem("pageHistory") || "[]");
-  
-      const apiURL = "https://script.google.com/macros/s/AKfycbzFMy8XoOnNS-jgl_OWVsk-VlL1F9safbBj4BQAlCZZ0VNPMhzRD12-4DYByQj7SmXu1Q/exec"; 
-      const params = new URLSearchParams({
-        action: "purchase",
-        name: userName,
-        stay: stayMinutes,
-        total: totalPrice,
-        items: itemsSummary,
-        history: pageHistory.join(" → "),
-        group: group
-      });
-
-      fetch(`${apiURL}?${params.toString()}`)
-        .then(res=>res.text())
-        .then(data=>console.log("purchase recorded:", data))
-        .catch(err=>console.error("purchase record error:", err));
-
       window.location.href = "purchase.html";
     }
   </script>
