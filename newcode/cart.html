@@ -114,8 +114,8 @@
     localStorage.setItem("pageHistory", JSON.stringify(pageHistory))
 
 
-    // 訪問ログ送信
-    const visitParams = new URLSearchParams({
+// 訪問ログ送信
+const visitParams = new URLSearchParams({
       action: "visit",
       history: pageHistory.join(" → "),
       page: currentPage,
@@ -126,7 +126,7 @@
       .then(data=>console.log("visit recorded:", data))
       .catch(err=>console.error("visit record error:", err));
 
-   // おすすめ商品
+// おすすめ商品
     
 const recommendCandidates = [
   {name:"グミ", price:100, img:"https://hana-0706.github.io/sweets/image/gumi.png"},
@@ -160,7 +160,7 @@ function renderRecommendations(){
       document.getElementById("recommend-block").style.display="block";
     }
 
-  // Bグループのみ表示
+// Bグループのみ表示
     if(group === "B"){
       renderRecommendations();
       sessionStorage.setItem("group", "B");
@@ -168,7 +168,7 @@ function renderRecommendations(){
       sessionStorage.setItem("group", "A");
 }
         
-  //ページ遷移
+//ページ遷移
     function goToPurchase() {
       window.location.href = "purchase.html";
     }
