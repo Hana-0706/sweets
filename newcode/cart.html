@@ -168,7 +168,7 @@ function renderRecommendations(){
     if(group === "B"){
       renderRecommendations();
       console.log("Bグループ → おすすめ商品を表示");
-    }else {
+    }else if (group === "A") {
       console.log("Aグループ → おすすめ商品なし");
     }else {
       console.warn("グループ不明 → おすすめ非表示");
