@@ -112,6 +112,13 @@
         });
     }
 
+   //購入完了で、グループのリセット
+   localStorage.removeItem("group");
+   localStorage.removeItem("hasLoggedIn");
+
+   console.log("購入完了 → 次回訪問でグループを再割り振りします。");
+
+
    document.querySelector('.purchase-btn').addEventListener("click", completePurchase);
   </script>
 
