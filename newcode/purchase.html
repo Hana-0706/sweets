@@ -100,7 +100,16 @@
         .then(data => {
           console.log("サーバー応答:", data);
           alert("購入が記録されました！ありがとうございました。");
-          localStorage.clear();
+
+          //グループリセット
+          localStorage.removeItem("group");
+          localStorage.removeItem("hasLoggedIn");
+          console.log("購入完了"→ 次回訪問でグループを再割り振り"); 
+
+          localStorage.removeItem("cart");
+          localStorage.removeItem("pageHistory");
+          localStorage.removeItem("entryTime");
+
           location.href = "index.html";
         })
         .catch(error => {
@@ -110,13 +119,9 @@
           btn.textContent = "✅ この内容で購入する";
           isSending = false;
         });
-    }
+    
 
-   //購入完了で、グループのリセット
-   localStorage.removeItem("group");
-   localStorage.removeItem("hasLoggedIn");
-
-   console.log("購入完了 → 次回訪問でグループを再割り振りします。");
+  
 
 
    document.querySelector('.purchase-btn').addEventListener("click", completePurchase);
