@@ -164,9 +164,9 @@ function renderRecommendations(){
 // Bグループのみ表示
     if(group === "B"){
       renderRecommendations();
-      sessionStorage.setItem("group", "B");
+      localStorage.setItem("group", "B");
     }else {
-      sessionStorage.setItem("group", "A");
+      localStorage.setItem("group", "A");
 }
         
 //ページ遷移
