@@ -52,12 +52,27 @@
 
 <script>
 // グループ分け
-let group = localStorage.getItem("group");
-if (!group) {
-  group = (Math.random() < 0.5) ? "A" : "B";
-  localStorage.setItem("group", group);
+
+function onLogin() {
+    //初回ログインか確認
+    let hasLoggedIn = localStorage.getItem("hasLoggedIn");
+
+    //初回ログイン
+    if (!hasLoggedIn) {
+        //A/Bをランダム分け
+        let group = (Math.random() < 0.5) ? "A" : "B";
+        localStorage.setItem("group", group);
+        
+    //フラグを立てる　２回目以降は飛ばす
+    localStorage.setItem("hasLoggedIn", "true");
+
+    console.log(" 初回ログイン → グループを分け:", group);
+  } else {
+    // すでにグループ分けされている場合はそれを維持
+    let group = localStorage.getItem("group");
+    console.log(" 2回目以降のログイン → 既存グループ:", group);
+  }
 }
-console.log("Experiment group (index page):", group);
 </script>
 
 
