@@ -43,10 +43,13 @@
   ">購入へすすむ →</button>
 
    <script>
-//グループ呼び出し
-　　let group = localStorage.getItem("group"); 
-　　console.log("Experiment group (this page):", group);
-　　
+  //グループ呼び出し
+    const group = localStorage.getItem("group");
+    if (!group) {
+      console.warn("グループ情報が見つかりません。");
+    } else {
+      console.log("Experiment group (this page):", group);
+    } 
      
     const apiURL = "https://script.google.com/macros/s/AKfycbzFMy8XoOnNS-jgl_OWVsk-VlL1F9safbBj4BQAlCZZ0VNPMhzRD12-4DYByQj7SmXu1Q/exec";
 
@@ -164,11 +167,13 @@ function renderRecommendations(){
 // Bグループのみ表示
     if(group === "B"){
       renderRecommendations();
-      localStorage.setItem("group", "B");
+      console.log("Bグループ → おすすめ商品を表示");
     }else {
-      localStorage.setItem("group", "A");
-}
-        
+      console.log("Aグループ → おすすめ商品なし");
+    }else {
+      console.warn("グループ不明 → おすすめ非表示");
+    }
+             
 //ページ遷移
     function goToPurchase() {
       window.location.href = "purchase.html";
