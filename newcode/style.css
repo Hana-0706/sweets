@@ -70,7 +70,7 @@ header h1 {
 }
 
 .product-card img {
-  width: 100%;
+  width: 70%;
   height: auto;
   border-radius: 8px;
 }
@@ -102,5 +102,6 @@ footer {
   color: #880e4f;
   margin-top: 40px;
 }
+
 
 
