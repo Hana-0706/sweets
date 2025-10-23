@@ -77,7 +77,7 @@
 
       const entryTime = new Date(localStorage.getItem("entryTime"));
       const leaveTime = new Date();
-      const stayMinutes = Math.round((leaveTime - entryTime) / 1000 / 60);
+      const stayMinutes = Math.round((leaveTime - entryTime) / 1000);
 
       const itemsSummary = cart.map(item => `${item.name}x${item.quantity}`).join(", ");
       const pathHistory = JSON.parse(localStorage.getItem("pageHistory") || "[]");
