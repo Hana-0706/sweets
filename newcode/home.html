@@ -108,6 +108,15 @@
   window.addEventListener("DOMContentLoaded", updateCartCount);
 </script>
 
+<script>
+  if (!localStorage.getItem("entryTime")) {
+    const now = new Date().toISOString();
+    localStorage.setItem("entryTime", now);
+    console.log("訪問開始時間を記録:", now);
+  }
+</script>
+
+  
 <script src="track.js"></script>
 
 <script>
